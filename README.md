@@ -41,8 +41,8 @@ yarn dev
 ## Additional Resources
 
 - Sample App
-  - Frontend Repo: <TODO: link to public fe repo>
-  - Live Demo: <TODO: link to hosted sample app>
+  - [Frontend Repo](https://github.com/circlefin/w3s-sample-user-controlled-client-web)
+  - [Live Demo](http://sample-app.circle.com/pw-user-controlled/foundational)
   - Walkthrough Video: <TODO: link to video>
 
 - [Circle Web3 Services Node.js SDK](https://developers.circle.com/w3s/docs/nodejs-sdk) supports User-Controlled Wallets, Developer-Controlled Wallets and Smart Contract Platform. See [Programmable Wallets](https://developers.circle.com/w3s/docs/circle-programmable-wallets-an-overview) and [Smart Contract Platform](https://developers.circle.com/w3s/docs/smart-contract-platform) to learn about these features and concepts.
