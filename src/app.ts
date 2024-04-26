@@ -1,5 +1,6 @@
 import cors from 'cors';
-import express, { Express, Request, Response } from 'express';
+import { Express, Request, Response } from 'express';
+import express from 'express';
 import { signUp, signIn } from './controllers';
 import {
   validate,
@@ -16,20 +17,20 @@ import {
   authTransRouter
 } from './routers';
 
-const app: Express = express();
-const port = process.env.PORT ?? 8080;
+export const app: Express = express();
+const parentRouter = express.Router();
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (_req: Request, res: Response) => {
+parentRouter.get('/', (_req: Request, res: Response) => {
   res.send('Sample Server');
 });
 
 /**
  * Health check endpoint.
  */
-app.get('/ping', (_req: Request, res: Response) => {
+parentRouter.get('/ping', (_req: Request, res: Response) => {
   res.status(200).send('pong');
 });
 
@@ -46,7 +47,7 @@ app.get('/ping', (_req: Request, res: Response) => {
  *  encryptionKey: string - encryption key to use to execute challengeIds
  *  challengeId: string   - used to initiate a challenge flow to setup PIN + Wallet
  */
-app.post('/signup', validate(authenticationSchema), signUp);
+parentRouter.post('/signup', validate(authenticationSchema), signUp);
 
 /**
  * POST - /signIn
@@ -66,16 +67,20 @@ app.post('/signup', validate(authenticationSchema), signUp);
  * If user credentials wrong or don't exist:
  *  returns 404
  */
-app.post('/signin', validate(authenticationSchema), signIn);
+parentRouter.post('/signin', validate(authenticationSchema), signIn);
 
-app.use('/users', usersRouter, authUserRouter);
-app.use('/tokens', tokensRouter);
-app.use('/wallets', authMiddleware, walletsRouter);
-app.use('/transactions', transactionsRouter, authTransRouter);
+/*
+ * Add all sub paths to the parent router
+ */
+parentRouter.use('/users', usersRouter, authUserRouter);
+parentRouter.use('/tokens', tokensRouter);
+parentRouter.use('/wallets', authMiddleware, walletsRouter);
+parentRouter.use('/transactions', transactionsRouter, authTransRouter);
+
+/*
+ * Add the parent router with ALL paths to the main app
+ */
+app.use('/pw-user-controlled/foundational', parentRouter);
 
 // Error handling
 app.use(errorHandler);
-
-export const server = app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});

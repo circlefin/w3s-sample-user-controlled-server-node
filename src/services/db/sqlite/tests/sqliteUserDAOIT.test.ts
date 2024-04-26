@@ -8,10 +8,11 @@ describe('Sqlite User DAO', () => {
   let client: Database;
   let userDAO: UserDAO;
 
-  beforeAll(() => {
+  beforeAll((done) => {
     client = new Database(':memory:');
     userDAO = new SqliteUserDAO(client);
     createUserTable(client);
+    done();
   });
 
   afterAll(() => {
