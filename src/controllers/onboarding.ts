@@ -3,6 +3,9 @@ import { circleUserSdk, userDAO } from '../services';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../middleware';
 import { hash, compare } from 'bcrypt';
+import { CreateUserWithPinChallenge200Response } from '@circle-fin/user-controlled-wallets/dist/types/clients/user-controlled-wallets';
+import { TrimDataResponse } from '@circle-fin/user-controlled-wallets/dist/types/clients/core';
+import { logger } from '../services/logging/logger';
 
 export const signUpCallback = (req: Request, res: Response) =>
   async function (err: Error | null, rows: User[]) {
@@ -30,6 +33,9 @@ export const signUpCallback = (req: Request, res: Response) =>
         newUserId,
         req.body.email,
         await hash(req.body.password, 10)
+      );
+      logger.info(
+        `New user inserted into DB, userId: ${newUserId}, email: ${req.body.email}`
       );
       res.status(200).send({
         userId: newUserId,
@@ -70,7 +76,9 @@ export const signInCallback = (req: Request, res: Response) =>
       const userResponse = await circleUserSdk.getUser({
         userId: user.userId
       });
-      let challengeResponse = undefined;
+      let challengeResponse:
+        | TrimDataResponse<CreateUserWithPinChallenge200Response>
+        | undefined = undefined;
       if (
         userResponse.data?.user?.pinStatus !== 'ENABLED' ||
         userResponse.data?.user?.securityQuestionStatus !== 'ENABLED'
