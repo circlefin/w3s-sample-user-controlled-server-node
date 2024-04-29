@@ -11,7 +11,9 @@ initDB();
 
 const port = process.env.PORT ?? 8080;
 const server = app.listen(port, () => {
-  logger.info(`Server is running at http://localhost:${port}`);
+  logger.info(
+    `Server is running at http://localhost:${port}/pw-user-controlled/foundational`
+  );
 });
 
 process.on('SIGINT', function () {

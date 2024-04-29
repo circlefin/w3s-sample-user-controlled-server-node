@@ -23,7 +23,7 @@ This is a sample backend server that plays a part in the larger Sample App proje
 
 ## Get Started
 
-Run the following commands to start the server with an in-memory SQLite database at `localhost:8080`:
+Run the following commands to start the server with an in-memory SQLite database at `localhost:8080/pw-user-controlled/foundational`:
 
 ``` bash
 nvm use
