@@ -31,7 +31,6 @@ export const createTransaction = async (
 
     const response = await circleUserSdk.createTransaction({
       userToken: req.headers['token'] as string,
-      // Yup validation in the middleware allows the spread of the req.body valid.
       fee: feeConfig,
       idempotencyKey: req.body.idempotencyKey,
       refId: req.body.refId,
