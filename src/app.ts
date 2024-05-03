@@ -18,19 +18,18 @@ import {
 } from './routers';
 
 export const app: Express = express();
-const parentRouter = express.Router();
 
 app.use(cors());
 app.use(express.json());
 
-parentRouter.get('/', (_req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.send('Sample Server');
 });
 
 /**
  * Health check endpoint.
  */
-parentRouter.get('/ping', (_req: Request, res: Response) => {
+app.get('/ping', (_req: Request, res: Response) => {
   res.status(200).send('pong');
 });
 
@@ -47,7 +46,7 @@ parentRouter.get('/ping', (_req: Request, res: Response) => {
  *  encryptionKey: string - encryption key to use to execute challengeIds
  *  challengeId: string   - used to initiate a challenge flow to setup PIN + Wallet
  */
-parentRouter.post('/signup', validate(authenticationSchema), signUp);
+app.post('/signup', validate(authenticationSchema), signUp);
 
 /**
  * POST - /signIn
@@ -67,20 +66,15 @@ parentRouter.post('/signup', validate(authenticationSchema), signUp);
  * If user credentials wrong or don't exist:
  *  returns 404
  */
-parentRouter.post('/signin', validate(authenticationSchema), signIn);
+app.post('/signin', validate(authenticationSchema), signIn);
 
 /*
- * Add all sub paths to the parent router
+ * Add all sub paths
  */
-parentRouter.use('/users', usersRouter, authUserRouter);
-parentRouter.use('/tokens', tokensRouter);
-parentRouter.use('/wallets', authMiddleware, walletsRouter);
-parentRouter.use('/transactions', transactionsRouter, authTransRouter);
-
-/*
- * Add the parent router with ALL paths to the main app
- */
-app.use('/pw-user-controlled/foundational', parentRouter);
+app.use('/users', usersRouter, authUserRouter);
+app.use('/tokens', tokensRouter);
+app.use('/wallets', authMiddleware, walletsRouter);
+app.use('/transactions', transactionsRouter, authTransRouter);
 
 // Error handling
 app.use(errorHandler);
