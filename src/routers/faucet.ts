@@ -14,9 +14,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './users';
-export * from './onboarding';
-export * from './wallets';
-export * from './transactions';
-export * from './tokens';
-export * from './faucet';
+import express from 'express';
+import { postFaucetDripSchema, validate } from '../middleware';
+import { dripFaucet } from '../controllers';
+
+const faucet = express.Router();
+
+/**
+ * POST - /faucet/drips
+ * Request testnet tokens to specified wallet.
+ *
+ * Params:
+ *  address: string         - Wallet address
+ *  blockchain: string      - Specified blockchain
+ *
+ * Returns: null
+ *
+ */
+faucet.post('/drips', validate(postFaucetDripSchema), dripFaucet);
+
+export { faucet };

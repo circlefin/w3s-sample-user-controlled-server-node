@@ -14,9 +14,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './users';
-export * from './onboarding';
-export * from './wallets';
-export * from './transactions';
-export * from './tokens';
-export * from './faucet';
+import { NextFunction, Request, Response } from 'express';
+import { circleUserSdk } from '../services';
+
+export const dripFaucet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await circleUserSdk.requestTestnetTokens({
+      address: req.body.address,
+      blockchain: req.body.blockchain,
+      usdc: true
+    });
+
+    res.status(200).send();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
