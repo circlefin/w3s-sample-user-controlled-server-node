@@ -30,7 +30,8 @@ import {
   tokens as tokensRouter,
   wallets as walletsRouter,
   transactions as transactionsRouter,
-  authTransRouter
+  authTransRouter,
+  faucet as faucetRouter
 } from './routers';
 
 export const app: Express = express();
@@ -91,6 +92,7 @@ app.use('/users', usersRouter, authUserRouter);
 app.use('/tokens', tokensRouter);
 app.use('/wallets', authMiddleware, walletsRouter);
 app.use('/transactions', transactionsRouter, authTransRouter);
+app.use('/faucet', authMiddleware, faucetRouter);
 
 // Error handling
 app.use(errorHandler);

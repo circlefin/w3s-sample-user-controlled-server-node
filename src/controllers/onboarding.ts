@@ -85,6 +85,7 @@ export const signInCallback = (req: Request, res: Response) =>
         res.sendStatus(401);
         return;
       }
+
       // valid credentials
       const tokenResponse = await circleUserSdk.createUserToken({
         userId: user.userId

@@ -198,3 +198,14 @@ export const getTokenDetailsSchema = yup.object({
     .noUnknown(true)
     .strict()
 });
+
+// Faucet
+export const postFaucetDripSchema = yup.object({
+  body: yup
+    .object({
+      address: yup.string().required(),
+      blockchain: yup.string().required()
+    })
+    .noUnknown(true)
+    .strict()
+});

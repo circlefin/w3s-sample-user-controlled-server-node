@@ -16,7 +16,7 @@
   "author": "@circle-fin",
   "license": "ISC",
   "dependencies": {
-    "@circle-fin/user-controlled-wallets": "^3.0.0",
+    "@circle-fin/user-controlled-wallets": "^4.0.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
