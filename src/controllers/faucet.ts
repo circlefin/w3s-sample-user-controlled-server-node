@@ -26,7 +26,8 @@ export const dripFaucet = async (
     await circleUserSdk.requestTestnetTokens({
       address: req.body.address,
       blockchain: req.body.blockchain,
-      usdc: true
+      usdc: true,
+      native: req.body.blockchain === 'AVAX-FUJI'
     });
 
     res.status(200).send();
