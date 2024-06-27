@@ -14,6 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { Blockchain } from '@circle-fin/user-controlled-wallets';
 import { circleUserSdk } from '../services';
 import { Request, Response, NextFunction } from 'express';
 
@@ -63,6 +64,23 @@ export const getWallet = async (
       id: req.params.id
     });
     res.status(200).send(response.data);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const createWallet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const response = await circleUserSdk.createWallet({
+      blockchains: [req.body.blockchain as Blockchain],
+      userToken: req.headers['token'] as string
+    });
+
+    res.status(200).send(response.data?.challengeId);
   } catch (error: unknown) {
     next(error);
   }
