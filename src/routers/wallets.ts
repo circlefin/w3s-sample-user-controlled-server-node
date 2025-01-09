@@ -21,7 +21,14 @@ import {
   validate,
   walletTokenBalanceSchema
 } from '../middleware';
-import { getWallet, getWalletTokenBalance, listWallets } from '../controllers';
+import {
+  createWallet,
+  getWallet,
+  getWalletTokenBalance,
+  listWallets
+} from '../controllers';
+
+import * as yup from 'yup';
 
 const wallets = express.Router();
 
@@ -121,5 +128,31 @@ wallets.get(
  *
  */
 wallets.get('/:id', validate(getWalletSchema), getWallet);
+
+/**
+ * POST - /wallets
+ * Creates a user controlled wallet with given blockchain.
+ *
+ * Body:
+ *  blockchain: Blockchain   - Blockchain network to create wallet on
+ *
+ * Returns:
+ *  challengeId: string      - used to initiate a challenge flow for the user to create new wallet
+ *
+ */
+wallets.post(
+  '/',
+  validate(
+    yup.object({
+      body: yup
+        .object({
+          blockchain: yup.string().required()
+        })
+        .noUnknown(true)
+        .strict()
+    })
+  ),
+  createWallet
+);
 
 export { wallets };
